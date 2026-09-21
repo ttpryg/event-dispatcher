@@ -1,0 +1,46 @@
+{
+    "name": "ttpryg/event-dispatcher",
+    "description": "PSR-14 Compliant Event Dispatcher & Listener Provider standalone PHP 8.1+ library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Toto",
+            "email": "totoprayogo1916@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "psr/event-dispatcher": "^1.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.20",
+        "phpunit/phpunit": "^10.0",
+        "rector/rector": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ttpryg\\EventDispatcher\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ttpryg\\EventDispatcher\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "fix:check": [
+            "vendor/bin/rector --dry-run",
+            "vendor/bin/pint --test"
+        ],
+        "fix": [
+            "vendor/bin/rector",
+            "vendor/bin/pint"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
+}
