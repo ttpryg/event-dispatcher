@@ -23,16 +23,12 @@ class ListenerProvider implements ListenerProviderInterface
 
     public function getListenersForEvent(object $event): iterable
     {
-        $listeners = [];
-
         foreach ($this->listeners as $eventType => $typeListeners) {
-            if ($event instanceof $eventType || $event instanceof $eventType) {
+            if ($event instanceof $eventType) {
                 foreach ($typeListeners as $typeListener) {
-                    $listeners[] = $typeListener;
+                    yield $typeListener;
                 }
             }
         }
-
-        return $listeners;
     }
 }
