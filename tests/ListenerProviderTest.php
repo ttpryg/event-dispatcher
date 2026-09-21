@@ -19,7 +19,8 @@ class ListenerProviderTest extends TestCase
         });
 
         $sampleEvent = new SampleEvent;
-        $listeners = iterator_to_array($listenerProvider->getListenersForEvent($sampleEvent));
+        $iterable = $listenerProvider->getListenersForEvent($sampleEvent);
+        $listeners = is_array($iterable) ? $iterable : iterator_to_array($iterable);
 
         $this->assertCount(1, $listeners);
         $listeners[0]($sampleEvent);

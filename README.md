@@ -1,17 +1,87 @@
 # EventDispatcher Library (`ttpryg/event-dispatcher`)
 
-PSR-14 Compliant Event Dispatcher & Listener Provider standalone PHP 8.1+ library.
+A lightweight, PSR-14 compliant Event Dispatcher & Listener Provider for PHP 8.1+.
 
-## 🌳 Directory Tree Structure
+---
 
+## 🌟 Key Features
+
+- **PSR-14 Compliant**: Fully compatible with PSR-14 contracts (`EventDispatcherInterface`, `ListenerProviderInterface`, `StoppableEventInterface`).
+- **Framework Agnostic**: Clean, decoupled design that works in any PHP application or framework.
+- **Stoppable Events Support**: Safely halt propagation chains when `isPropagationStopped()` returns true.
+- **Strictly Typed**: Built with modern PHP 8.1+ features (readonly properties, strict types).
+
+---
+
+## 📦 Installation
+
+Install the package via Composer:
+
+```bash
+composer require ttpryg/event-dispatcher
 ```
+
+> **Requirements:** PHP 8.1 or higher.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Define an Event
+
+```php
+namespace App\Event;
+
+use Psr\EventDispatcher\StoppableEventInterface;
+
+class UserRegisteredEvent implements StoppableEventInterface
+{
+    private bool $stopped = false;
+
+    public function __construct(
+        public readonly string $userId,
+        public readonly string $email
+    ) {}
+
+    public function isPropagationStopped(): bool
+    {
+        return $this->stopped;
+    }
+
+    public function stopPropagation(): void
+    {
+        $this->stopped = true;
+    }
+}
+```
+
+### 2. Register Listeners & Dispatch
+
+```php
+use Ttpryg\EventDispatcher\Provider\ListenerProvider;
+use Ttpryg\EventDispatcher\Dispatcher\EventDispatcher;
+use App\Event\UserRegisteredEvent;
+
+// 1. Initialize Listener Provider
+$provider = new ListenerProvider();
+
+// Register listener (Closure or callable)
+$provider->addListener(UserRegisteredEvent::class, function (UserRegisteredEvent $event) {
+    echo "Welcome email sent to: " . $event->email;
+});
+
+// 2. Initialize Dispatcher & Dispatch Event
+$dispatcher = new EventDispatcher($provider);
+$dispatcher->dispatch(new UserRegisteredEvent("usr_101", "user@example.com"));
+```
+
+---
+
+## 🌳 Architecture
+
+```text
 event-dispatcher/
-├── composer.json
 ├── src/
-│   ├── Contracts/
-│   │   ├── EventDispatcherInterface.php
-│   │   ├── ListenerProviderInterface.php
-│   │   └── StoppableEventInterface.php
 │   ├── Dispatcher/
 │   │   └── EventDispatcher.php
 │   ├── Provider/
@@ -21,42 +91,23 @@ event-dispatcher/
 ├── tests/
 │   ├── EventDispatcherTest.php
 │   └── ListenerProviderTest.php
-└── README.md
+└── composer.json
 ```
 
 ---
 
-## 🌟 Key Features
+## 🧪 Testing
 
-- **PSR-14 Compliant**: Standard Event Dispatcher, Listener Provider, and Stoppable Event Contracts.
-- **Framework Agnostic**: Pure PHP 8.1+ with zero external runtime dependencies.
-- **Stoppable Events**: Supports halting event propagation pipeline when `isPropagationStopped()` returns true.
+Run the test suite using PHPUnit:
 
----
-
-## 🚀 Usage Example
-
-```php
-use Ttpryg\EventDispatcher\Provider\ListenerProvider;
-use Ttpryg\EventDispatcher\Dispatcher\EventDispatcher;
-
-class UserRegisteredEvent
-{
-    public function __construct(public readonly string $userId) {}
-}
-
-// 1. Initialize Listener Provider
-$provider = new ListenerProvider();
-$provider->addListener(UserRegisteredEvent::class, function (UserRegisteredEvent $event) {
-    echo "User registered: " . $event->userId;
-});
-
-// 2. Initialize Dispatcher & Dispatch Event
-$dispatcher = new EventDispatcher($provider);
-$dispatcher->dispatch(new UserRegisteredEvent("user-123"));
+```bash
+composer test
+# or
+./vendor/bin/phpunit
 ```
 
 ---
 
 ## 📄 License
-MIT License.
+
+This project is open-sourced software licensed under the [MIT License](LICENSE).
