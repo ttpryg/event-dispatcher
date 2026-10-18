@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ttpryg\EventDispatcher\Provider;
 
 use Ttpryg\EventDispatcher\Contracts\ListenerProviderInterface;
