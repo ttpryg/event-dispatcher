@@ -6,4 +6,4 @@ namespace Ttpryg\EventDispatcher\Exceptions;
 
 use InvalidArgumentException;
 
-class InvalidListenerException extends InvalidArgumentException {}
+class InvalidListenerException extends InvalidArgumentException implements ExceptionInterface {}
